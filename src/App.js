@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import GameCard from "./components/GameCard/GameCard";
+import { fetchGames } from "./api/gameApi";
+  
+const App = () => {
+  const [games, setGames] = useState([]);
 
-function App() {
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchGames();
+      setGames(response.games);
+    };
+    fetchData();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {games.map(({ id, name, description, price }) => (
+        <GameCard key={id} title={name} description={description} price={price} />
+      ))}
     </div>
   );
-}
+};
 
 export default App;
